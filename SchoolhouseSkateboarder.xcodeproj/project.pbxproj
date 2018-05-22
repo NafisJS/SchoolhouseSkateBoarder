@@ -15,6 +15,7 @@
 		607A235D20B4012E00E4C3E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607A235B20B4012E00E4C3E4 /* Main.storyboard */; };
 		607A235F20B4012F00E4C3E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607A235E20B4012F00E4C3E4 /* Assets.xcassets */; };
 		607A236220B4012F00E4C3E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607A236020B4012F00E4C3E4 /* LaunchScreen.storyboard */; };
+		60FF8F3320B4450700CCD945 /* Skater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FF8F3220B4450700CCD945 /* Skater.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		607A235E20B4012F00E4C3E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		607A236120B4012F00E4C3E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		607A236320B4012F00E4C3E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60FF8F3220B4450700CCD945 /* Skater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skater.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				607A235E20B4012F00E4C3E4 /* Assets.xcassets */,
 				607A236020B4012F00E4C3E4 /* LaunchScreen.storyboard */,
 				607A236320B4012F00E4C3E4 /* Info.plist */,
+				60FF8F3220B4450700CCD945 /* Skater.swift */,
 			);
 			path = SchoolhouseSkateboarder;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607A235820B4012E00E4C3E4 /* GameScene.swift in Sources */,
+				60FF8F3320B4450700CCD945 /* Skater.swift in Sources */,
 				607A235A20B4012E00E4C3E4 /* GameViewController.swift in Sources */,
 				607A235220B4012E00E4C3E4 /* AppDelegate.swift in Sources */,
 			);

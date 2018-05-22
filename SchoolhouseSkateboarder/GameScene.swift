@@ -7,83 +7,100 @@
 //
 
 import SpriteKit
-import GameplayKit
 
 class GameScene: SKScene {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    let skater = Skater(imageNamed: "skater")
+    
+    var bricks = [SKSpriteNode]()
+    var brickSize = CGSize.zero
+    var scrollSpeed: CGFloat = 5.0
+    var lastUpdateTime: TimeInterval?
     
     override func didMove(to view: SKView) {
+        anchorPoint = CGPoint.zero
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
+        let background = SKSpriteNode(imageNamed: "background")
+        let xMid = frame.midX
+        let yMid = frame.midY
+        background.position = CGPoint(x: xMid, y: yMid)
+        addChild(background)
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
+        resetSkater()
+        addChild(skater)
+    }
+    
+    func resetSkater() {
+        let skaterX = frame.midX / 2.0
+        let skaterY = frame.midY / 2.0 + 6.0
+        skater.position = CGPoint(x: skaterX, y: skaterY)
+        skater.zPosition = 10
+        skater.minimumY = skaterY
+    }
+    
+    func spawnBrick (atPosition position: CGPoint) -> SKSpriteNode {
+        let brick = SKSpriteNode(imageNamed: "sidewalk")
+        brick.position = position
+        brick.zPosition = 8
+        addChild(brick)
         
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
+        brickSize = brick.size
+        bricks.append(brick)
+        
+        return brick
+    }
+    
+    func updateBricks(withScrollAmount currentScrollAmount: CGFloat) {
+        var farthestRightBrickX: CGFloat = 0.0
+        
+        for brick in bricks {
             
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
-    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+            let newX = brick.position.x - currentScrollAmount
+            
+            if newX < -brickSize.width {
+                brick.removeFromParent()
+                
+                if let brickIndex = bricks.index(of: brick) {
+                    bricks.remove(at: brickIndex)
+                }
+            } else {
+                brick.position = CGPoint(x: newX, y: brick.position.y)
+                
+                if brick.position.x > farthestRightBrickX {
+                    farthestRightBrickX = brick.position.x
+                }
+            }
         }
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        while farthestRightBrickX < frame.width {
+            var brickX = farthestRightBrickX + brickSize.width + 1.0
+            let brickY = brickSize.height / 2.0
+            
+            let randomNumber = arc4random_uniform(99)
+            
+            if randomNumber < 5 {
+                let gap = 20.0 * scrollSpeed
+                brickX += gap
+            }
+            
+            let newBrick = spawnBrick(atPosition: CGPoint(x: brickX, y: brickY))
+            farthestRightBrickX = newBrick.position.x
+        }
     }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        var elapsedTime: TimeInterval = 0.0
+        
+        if let lastTimeStamp = lastUpdateTime {
+            elapsedTime = currentTime - lastTimeStamp
+        }
+        lastUpdateTime = currentTime
+        
+        let expectedElapsedTime: TimeInterval = 1.0 / 60.0
+        
+        let scrollAdjustment = CGFloat(elapsedTime / expectedElapsedTime)
+        let currentScrollAmount = scrollSpeed * scrollAdjustment
+        
+        updateBricks(withScrollAmount: currentScrollAmount)
     }
 }

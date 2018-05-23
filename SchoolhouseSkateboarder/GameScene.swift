@@ -11,6 +11,7 @@ import SpriteKit
 class GameScene: SKScene {
     
     let skater = Skater(imageNamed: "skater")
+    let gravitySpeed: CGFloat = 1.5
     
     var bricks = [SKSpriteNode]()
     var brickSize = CGSize.zero
@@ -18,6 +19,9 @@ class GameScene: SKScene {
     var lastUpdateTime: TimeInterval?
     
     override func didMove(to view: SKView) {
+       
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -6.0)
+        
         anchorPoint = CGPoint.zero
         
         let background = SKSpriteNode(imageNamed: "background")
@@ -28,6 +32,11 @@ class GameScene: SKScene {
         
         resetSkater()
         addChild(skater)
+        
+        let tapMethod = #selector(GameScene.handleTap(tapGesture:))
+        let tapGesture = UITapGestureRecognizer(target: self, action: tapMethod)
+        view.addGestureRecognizer(tapGesture)
+        
     }
     
     func resetSkater() {
@@ -88,6 +97,22 @@ class GameScene: SKScene {
         }
     }
     
+    func updateSkater() {
+        if !skater.isOnGround {
+            let velocityY = skater.velocity.y - gravitySpeed
+            skater.velocity = CGPoint(x: skater.velocity.x, y: velocityY)
+            
+            let newSkaterY: CGFloat = skater.position.y + skater.velocity.y
+            skater.position = CGPoint(x: skater.position.x, y: newSkaterY)
+            
+            if skater.position.y < skater.minimumY {
+                skater.position.y = skater.minimumY
+                skater.velocity = CGPoint.zero
+                skater.isOnGround = true
+            }
+        }
+    }
+    
     override func update(_ currentTime: TimeInterval) {
         var elapsedTime: TimeInterval = 0.0
         
@@ -102,5 +127,14 @@ class GameScene: SKScene {
         let currentScrollAmount = scrollSpeed * scrollAdjustment
         
         updateBricks(withScrollAmount: currentScrollAmount)
+        updateSkater()
     }
+    
+    @objc func handleTap(tapGesture: UITapGestureRecognizer) {
+        if skater.isOnGround {
+            skater.velocity = CGPoint(x: 0.0, y: skater.jumpSpeed)
+            skater.isOnGround = false
+        }
+    }
+    
 }

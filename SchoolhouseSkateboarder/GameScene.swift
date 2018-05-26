@@ -22,8 +22,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case high = 100.0
     }
     
+    enum GameState {
+        case notRunning
+        case running
+    }
+    
     let skater = Skater(imageNamed: "skater")
     let gravitySpeed: CGFloat = 1.5
+    
+    var score: Int = 0
+    var highScore: Int = 0
+    var lastScoreUpdateTime: TimeInterval = 0.0
     
     var bricks = [SKSpriteNode]()
     var brickSize = CGSize.zero
@@ -31,6 +40,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gems = [SKSpriteNode]()
     
     var brickLevel = Bricklevel.low
+    var gameState = GameState.notRunning
     
     var scrollSpeed: CGFloat = 5.0
     let startingScrollSpeed: CGFloat = 5.0
@@ -50,6 +60,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.position = CGPoint(x: xMid, y: yMid)
         addChild(background)
         
+        setupLabels()
+        
         skater.setupPhysicalBody()
         addChild(skater)
         
@@ -57,7 +69,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: tapMethod)
         view.addGestureRecognizer(tapGesture)
         
-        startGame()
+        let menuBackgroundColor = UIColor.black.withAlphaComponent(0.4)
+        let menuLayer = MenuLayer(color: menuBackgroundColor, size: frame.size)
+        
+        menuLayer.anchorPoint = CGPoint(x: 0.0, y: 0.0)
+        menuLayer.position = CGPoint(x: 0.0, y: 0.0)
+        menuLayer.zPosition = 30
+        menuLayer.name = "menuLayer"
+        menuLayer.display(message: "Click to play", score: nil)
+        addChild(menuLayer)
         
     }
     
@@ -76,7 +96,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func startGame() {
         
+        gameState = .running
         resetSkater()
+        
+        score = 0
         
         scrollSpeed = startingScrollSpeed
         brickLevel = .low
@@ -95,7 +118,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func gameOver() {
         
-        startGame()
+        gameState = .notRunning
+        
+        if score > highScore {
+            highScore = score
+            updateHighScoreLabelText()
+        }
+        
+        let menuBackgroundColor = UIColor.black.withAlphaComponent(0.4)
+        let menuLayer = MenuLayer(color: menuBackgroundColor, size: frame.size)
+        
+        menuLayer.anchorPoint = CGPoint.zero
+        menuLayer.position = CGPoint.zero
+        menuLayer.zPosition = 30
+        menuLayer.name = "menuLayer"
+        menuLayer.display(message: "Game over", score: score)
+        addChild(menuLayer)
+        
     }
     
     func spawnBrick (atPosition position: CGPoint) -> SKSpriteNode {
@@ -168,7 +207,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let randomNumber = arc4random_uniform(99)
             
-            if randomNumber < 5 {
+            if randomNumber < 2 && score > 10 {
                 let gap = 20.0 * scrollSpeed
                 brickX += gap
                 
@@ -178,7 +217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 spawnGem(atPostion: CGPoint(x: newGemX, y: newGemY))
                 
-            } else if randomNumber < 10 {
+            } else if randomNumber < 4 && score > 20 {
                 if brickLevel == .high {
                     brickLevel = .low
                 } else if brickLevel == .low {
@@ -223,7 +262,76 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
+    func updateScore(withCurrentTime currentTime: TimeInterval) {
+        
+        let elapsedTime = currentTime - lastScoreUpdateTime
+        
+        if elapsedTime > 1.0 {
+            score += Int(scrollSpeed)
+            lastScoreUpdateTime = currentTime
+            updateScoreLabelText()
+        }
+    }
+    
+    func setupLabels() {
+        //Text label - score
+        let scoreTextLabel: SKLabelNode = SKLabelNode(text: "score")
+        scoreTextLabel.position = CGPoint(x: 14.0, y: frame.size.height - 20)
+        scoreTextLabel.horizontalAlignmentMode = .left
+        scoreTextLabel.fontName = "Courier-Bold"
+        scoreTextLabel.fontSize = 14.0
+        scoreTextLabel.zPosition = 20
+        addChild(scoreTextLabel)
+        
+        //Label - score
+        let scoreLabel: SKLabelNode = SKLabelNode(text: "0")
+        scoreLabel.position = CGPoint(x: 14.0, y: frame.size.height - 40)
+        scoreLabel.horizontalAlignmentMode = .left
+        scoreLabel.fontName = "Courier-Bold"
+        scoreLabel.fontSize = 18.0
+        scoreLabel.name = "scoreLabel"
+        scoreLabel.zPosition = 20
+        addChild(scoreLabel)
+
+        //Text label - High score
+        let highTextLabel: SKLabelNode = SKLabelNode(text: "High score")
+        highTextLabel.position = CGPoint(x: frame.size.width - 14.0, y: frame.size.height - 20)
+        highTextLabel.horizontalAlignmentMode = .right
+        highTextLabel.fontName = "Courier-Bold"
+        highTextLabel.fontSize = 14.0
+        highTextLabel.zPosition = 20
+        addChild(highTextLabel)
+
+        //Label - high score
+        let highScoreLabel: SKLabelNode = SKLabelNode(text: "0")
+        highScoreLabel.position = CGPoint(x: frame.size.width - 14.0, y: frame.size.height - 40)
+        highScoreLabel.horizontalAlignmentMode = .right
+        highScoreLabel.fontName = "Courier-Bold"
+        highScoreLabel.fontSize = 18.0
+        highScoreLabel.name = "highScoreLabel"
+        highScoreLabel.zPosition = 20
+        addChild(highScoreLabel)
+
+    }
+    
+    func updateScoreLabelText() {
+        if let scoreLabel = childNode(withName: "scoreLabel") as? SKLabelNode {
+            scoreLabel.text = String(format: "%04d", score)
+        }
+    }
+
+    func updateHighScoreLabelText() {
+        if let highScoreLabel = childNode(withName: "highScoreLabel") as? SKLabelNode {
+            highScoreLabel.text = String(format: "%04d", highScore)
+        }
+    }
+
     override func update(_ currentTime: TimeInterval) {
+        
+        if gameState != .running {
+            return
+        }
+        
         var elapsedTime: TimeInterval = 0.0
         scrollSpeed += 0.01
         
@@ -240,21 +348,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateBricks(withScrollAmount: currentScrollAmount)
         updateSkater()
         updateGems(withScrollAmount: currentScrollAmount)
+        updateScore(withCurrentTime: currentTime)
     }
     
     @objc func handleTap(tapGesture: UITapGestureRecognizer) {
-        if skater.isOnGround {
-            skater.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 260.0))
+        
+        if gameState == .running {
+            if skater.isOnGround {
+                skater.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 260.0))
+                run(SKAction.playSoundFileNamed("jump.wav", waitForCompletion: false))
+            }
+        } else {
+            if let menuLayer: SKSpriteNode = childNode(withName: "menuLayer") as? SKSpriteNode {
+                menuLayer.removeFromParent()
+                startGame()
+            }
         }
     }
     
     // MARK:- SKPhysicsContactDelegate Methods
     func didBegin(_ contact: SKPhysicsContact) {
+        
         if contact.bodyA.categoryBitMask == PhysicsCategory.skater && contact.bodyB.categoryBitMask == PhysicsCategory.brick {
+            
+            if let velocityY = skater.physicsBody?.velocity.dy {
+                if !skater.isOnGround && velocityY < 100.0 {
+                    skater.createSparks()
+                }
+            }
             skater.isOnGround = true
+        
         } else if contact.bodyA.categoryBitMask == PhysicsCategory.skater && contact.bodyB.categoryBitMask == PhysicsCategory.gem {
+            
             if let gem = contact.bodyB.node as? SKSpriteNode {
                 removeGem(gem)
+                score += 50
+                updateScoreLabelText()
+                run(SKAction.playSoundFileNamed("gem.wav", waitForCompletion: false))
             }
         }
     }

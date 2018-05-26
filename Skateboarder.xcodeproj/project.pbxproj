@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6071D30E20B95ADF00605D0F /* MenuLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6071D30D20B95ADF00605D0F /* MenuLayer.swift */; };
+		6071D31120B9638900605D0F /* gem.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6071D30F20B9638800605D0F /* gem.wav */; };
+		6071D31220B9638900605D0F /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6071D31020B9638800605D0F /* jump.wav */; };
+		6071D31420B9655300605D0F /* sparks.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6071D31320B9655300605D0F /* sparks.sks */; };
 		607A235220B4012E00E4C3E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607A235120B4012E00E4C3E4 /* AppDelegate.swift */; };
 		607A235420B4012E00E4C3E4 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 607A235320B4012E00E4C3E4 /* GameScene.sks */; };
 		607A235620B4012E00E4C3E4 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 607A235520B4012E00E4C3E4 /* Actions.sks */; };
@@ -19,7 +23,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		607A234E20B4012E00E4C3E4 /* SchoolhouseSkateboarder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SchoolhouseSkateboarder.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6071D30D20B95ADF00605D0F /* MenuLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuLayer.swift; sourceTree = "<group>"; };
+		6071D30F20B9638800605D0F /* gem.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gem.wav; sourceTree = "<group>"; };
+		6071D31020B9638800605D0F /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump.wav; sourceTree = "<group>"; };
+		6071D31320B9655300605D0F /* sparks.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparks.sks; sourceTree = "<group>"; };
+		607A234E20B4012E00E4C3E4 /* Skateboarder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Skateboarder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607A235120B4012E00E4C3E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		607A235320B4012E00E4C3E4 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		607A235520B4012E00E4C3E4 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -54,7 +62,7 @@
 		607A234F20B4012E00E4C3E4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607A234E20B4012E00E4C3E4 /* SchoolhouseSkateboarder.app */,
+				607A234E20B4012E00E4C3E4 /* Skateboarder.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -69,9 +77,13 @@
 				607A235920B4012E00E4C3E4 /* GameViewController.swift */,
 				607A235B20B4012E00E4C3E4 /* Main.storyboard */,
 				607A235E20B4012F00E4C3E4 /* Assets.xcassets */,
+				6071D30F20B9638800605D0F /* gem.wav */,
+				6071D31020B9638800605D0F /* jump.wav */,
 				607A236020B4012F00E4C3E4 /* LaunchScreen.storyboard */,
 				607A236320B4012F00E4C3E4 /* Info.plist */,
 				60FF8F3220B4450700CCD945 /* Skater.swift */,
+				6071D30D20B95ADF00605D0F /* MenuLayer.swift */,
+				6071D31320B9655300605D0F /* sparks.sks */,
 			);
 			path = SchoolhouseSkateboarder;
 			sourceTree = "<group>";
@@ -79,9 +91,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		607A234D20B4012E00E4C3E4 /* SchoolhouseSkateboarder */ = {
+		607A234D20B4012E00E4C3E4 /* Skateboarder */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607A236620B4012F00E4C3E4 /* Build configuration list for PBXNativeTarget "SchoolhouseSkateboarder" */;
+			buildConfigurationList = 607A236620B4012F00E4C3E4 /* Build configuration list for PBXNativeTarget "Skateboarder" */;
 			buildPhases = (
 				607A234A20B4012E00E4C3E4 /* Sources */,
 				607A234B20B4012E00E4C3E4 /* Frameworks */,
@@ -91,9 +103,9 @@
 			);
 			dependencies = (
 			);
-			name = SchoolhouseSkateboarder;
+			name = Skateboarder;
 			productName = SchoolhouseSkateboarder;
-			productReference = 607A234E20B4012E00E4C3E4 /* SchoolhouseSkateboarder.app */;
+			productReference = 607A234E20B4012E00E4C3E4 /* Skateboarder.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -111,7 +123,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 607A234920B4012E00E4C3E4 /* Build configuration list for PBXProject "SchoolhouseSkateboarder" */;
+			buildConfigurationList = 607A234920B4012E00E4C3E4 /* Build configuration list for PBXProject "Skateboarder" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -124,7 +136,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				607A234D20B4012E00E4C3E4 /* SchoolhouseSkateboarder */,
+				607A234D20B4012E00E4C3E4 /* Skateboarder */,
 			);
 		};
 /* End PBXProject section */
@@ -134,9 +146,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6071D31120B9638900605D0F /* gem.wav in Resources */,
 				607A235D20B4012E00E4C3E4 /* Main.storyboard in Resources */,
 				607A235420B4012E00E4C3E4 /* GameScene.sks in Resources */,
+				6071D31220B9638900605D0F /* jump.wav in Resources */,
 				607A235F20B4012F00E4C3E4 /* Assets.xcassets in Resources */,
+				6071D31420B9655300605D0F /* sparks.sks in Resources */,
 				607A236220B4012F00E4C3E4 /* LaunchScreen.storyboard in Resources */,
 				607A235620B4012E00E4C3E4 /* Actions.sks in Resources */,
 			);
@@ -151,6 +166,7 @@
 			files = (
 				607A235820B4012E00E4C3E4 /* GameScene.swift in Sources */,
 				60FF8F3320B4450700CCD945 /* Skater.swift in Sources */,
+				6071D30E20B95ADF00605D0F /* MenuLayer.swift in Sources */,
 				607A235A20B4012E00E4C3E4 /* GameViewController.swift in Sources */,
 				607A235220B4012E00E4C3E4 /* AppDelegate.swift in Sources */,
 			);
@@ -331,7 +347,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		607A234920B4012E00E4C3E4 /* Build configuration list for PBXProject "SchoolhouseSkateboarder" */ = {
+		607A234920B4012E00E4C3E4 /* Build configuration list for PBXProject "Skateboarder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607A236420B4012F00E4C3E4 /* Debug */,
@@ -340,7 +356,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607A236620B4012F00E4C3E4 /* Build configuration list for PBXNativeTarget "SchoolhouseSkateboarder" */ = {
+		607A236620B4012F00E4C3E4 /* Build configuration list for PBXNativeTarget "Skateboarder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607A236720B4012F00E4C3E4 /* Debug */,
